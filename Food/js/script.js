@@ -243,13 +243,21 @@ document.addEventListener('DOMContentLoaded', () => {
 		return await res.json();
 	};
 
-	getResource('http://localhost:3000/menu')
+	// getResource('http://localhost:3000/menu')
+	// 	.then(data => {
+	// 		data.forEach(({img, altimg, title, descr, price}) => {
+	// 			new MenuCard(img, altimg, title, descr, price, '.menu .container').render();
+	// 		});
+	// 	});
+
+
+	axios.get('http://localhost:3000/menu')
 		.then(data => {
-			data.forEach(({img, altimg, title, descr, price}) => {
+			data.data.forEach(({img, altimg, title, descr, price}) => {
 				new MenuCard(img, altimg, title, descr, price, '.menu .container').render();
 			});
 		});
-	
+
 
 	/* getResource('http://localhost:3000/menu')
        .then(data => createCard(data));
@@ -353,4 +361,74 @@ document.addEventListener('DOMContentLoaded', () => {
 		}, 4000);
 	}
 
+
+	// * Slider
+
+	let slideIndex = 0;
+	const prev = document.querySelector('.offer__slider-prev'),
+			next = document.querySelector('.offer__slider-next'),
+			slidersWrapper = document.querySelector('.offer__slider-wrapper'),
+			sliders = slidersWrapper.children,
+			current = document.querySelector('#current'),
+			total = document.querySelector('#total');
+				
+	startSlide();
+
+	total.textContent = `${addZero(sliders.length)}`;
+	
+	function startSlide() {
+
+		showCurrentNum();
+		hideSliders();
+
+		function hideSliders() {
+			for (let i = 0; i < sliders.length; i++) {
+				if (i == slideIndex) {
+					continue;
+				} else {
+					sliders[i].classList.add('hide');
+					sliders[i].classList.remove('show', 'fade');
+				}
+			}
+		}
+
+		function showSlider() {
+			for (let i = 0; i < sliders.length; i++) {
+				if (i == slideIndex) {
+					sliders[i].classList.remove('hide');
+					sliders[i].classList.add('show', 'fade');
+				} else {
+					sliders[i].classList.add('hide');
+					sliders[i].classList.remove('show', 'fade');
+				} 
+			}
+		}
+
+		function showCurrentNum() {
+			current.textContent = `${addZero(slideIndex + 1)}`;
+		}
+		
+		prev.addEventListener('click', () => {
+			slideIndex--;
+
+			if (slideIndex < 0) {
+				slideIndex = sliders.length - 1;
+			}
+
+			showCurrentNum();
+			showSlider();
+		});
+
+		next.addEventListener('click', () => {
+			slideIndex++;
+
+			if (slideIndex > sliders.length - 1) {
+				slideIndex = 0;
+			}
+
+			showCurrentNum();
+			showSlider();
+		});
+	}
+	
 });
