@@ -177,7 +177,7 @@ document.addEventListener('DOMContentLoaded', () => {
 		}
 	});
 
-	const modalTimerId = setTimeout(openModal, 120000);
+	const modalTimerId = setTimeout(openModal, 300000);
 
 	function showModalByScroll() {
 		if ((Math.round(window.pageYOffset + document.documentElement.clientHeight)) >=
@@ -364,71 +364,102 @@ document.addEventListener('DOMContentLoaded', () => {
 
 	// * Slider
 
-	let slideIndex = 0;
-	const prev = document.querySelector('.offer__slider-prev'),
+	const slides = document.querySelectorAll('.offer__slide'),
+			prev = document.querySelector('.offer__slider-prev'),
 			next = document.querySelector('.offer__slider-next'),
-			slidersWrapper = document.querySelector('.offer__slider-wrapper'),
-			sliders = slidersWrapper.children,
+			total = document.querySelector('#total'),
 			current = document.querySelector('#current'),
-			total = document.querySelector('#total');
-				
-	startSlide();
+			slidesWrapper = document.querySelector('.offer__slider-wrapper'),
+			slidesField = document.querySelector('.offer__slider-inner'),
+			width = window.getComputedStyle(slidesWrapper).width;
 
-	total.textContent = `${addZero(sliders.length)}`;
+	let slideIndex = 1,
+		 offset = 0;
+
+	total.textContent = `${addZero(slides.length)}`;
+	current.textContent = `${addZero(slideIndex)}`;
+
+	slidesField.style.width = 100 * slides.length + '%';
+	slidesField.style.display = 'flex';
+	slidesField.style.transition = '0.5s all';
+
+	slidesWrapper.style.overflow = 'hidden';
+
+	slides.forEach(item => {
+		item.style.width = width;
+	});
+
+	prev.addEventListener('click', () => {
+		if (offset == 0) {
+			offset = +width.slice(0, -2) * (slides.length - 1);
+		} else {
+			offset -= +width.slice(0, -2);
+		}
+
+		slidesField.style.transform = `translateX(-${offset}px)`;
+
+		slideIndex--;
+
+		if (slideIndex < 1) {
+			slideIndex = slides.length;
+		}
+
+		current.textContent = `${addZero(slideIndex)}`;
+	});
+
+	next.addEventListener('click', () => {
+		if (offset == (+width.slice(0, -2) * (slides.length - 1))) {
+			offset = 0;
+		} else {
+			offset += +width.slice(0, -2);
+		}
+
+		slidesField.style.transform = `translateX(-${offset}px)`;
+
+		slideIndex++;
+
+		if (slideIndex > slides.length) {
+			slideIndex = 1;
+		}
+
+		current.textContent = `${addZero(slideIndex)}`;
+	});
+
+	/* showSlides(slideIndex);
+
+	total.textContent = `${addZero(slides.length)}`;
 	
-	function startSlide() {
-
-		showCurrentNum();
-		hideSliders();
-
-		function hideSliders() {
-			for (let i = 0; i < sliders.length; i++) {
-				if (i == slideIndex) {
-					continue;
-				} else {
-					sliders[i].classList.add('hide');
-					sliders[i].classList.remove('show', 'fade');
-				}
-			}
+	function showSlides(n) {
+		if (n < 1) {
+			slideIndex = slides.length;
 		}
 
-		function showSlider() {
-			for (let i = 0; i < sliders.length; i++) {
-				if (i == slideIndex) {
-					sliders[i].classList.remove('hide');
-					sliders[i].classList.add('show', 'fade');
-				} else {
-					sliders[i].classList.add('hide');
-					sliders[i].classList.remove('show', 'fade');
-				} 
-			}
+		if (n > slides.length) {
+			slideIndex = 1;
 		}
 
-		function showCurrentNum() {
-			current.textContent = `${addZero(slideIndex + 1)}`;
-		}
-		
-		prev.addEventListener('click', () => {
-			slideIndex--;
-
-			if (slideIndex < 0) {
-				slideIndex = sliders.length - 1;
-			}
-
-			showCurrentNum();
-			showSlider();
+		slides.forEach(item => {
+			item.classList.add('hide');
+			item.classList.remove('fade');
 		});
 
-		next.addEventListener('click', () => {
-			slideIndex++;
+		slides[slideIndex - 1].classList.add('fade');
+		slides[slideIndex - 1].classList.remove('hide');
 
-			if (slideIndex > sliders.length - 1) {
-				slideIndex = 0;
-			}
-
-			showCurrentNum();
-			showSlider();
-		});
+		current.textContent = `${addZero(slideIndex)}`;
 	}
+
+	function sliderPlus(n) {
+		showSlides(slideIndex += n);
+	}
+
+	prev.addEventListener('click', () => {
+		sliderPlus(-1);
+	});
+
+	next.addEventListener('click', () => {
+		sliderPlus(1);
+	}); */
 	
 });
+ 
