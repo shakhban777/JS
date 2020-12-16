@@ -365,6 +365,7 @@ document.addEventListener('DOMContentLoaded', () => {
 	// * Slider
 
 	const slides = document.querySelectorAll('.offer__slide'),
+			slider = document.querySelector('.offer__slider'),
 			prev = document.querySelector('.offer__slider-prev'),
 			next = document.querySelector('.offer__slider-next'),
 			total = document.querySelector('#total'),
@@ -389,6 +390,31 @@ document.addEventListener('DOMContentLoaded', () => {
 		item.style.width = width;
 	});
 
+	slider.style.position = 'relative';
+
+	const indicators = document.createElement('ol'),
+			dots = [];
+	indicators.classList.add('carousel-indicators');
+	
+	slider.append(indicators);
+
+	for (let i = 0; i < slides.length; i++) {
+		const dot = document.createElement('li');
+		dot.setAttribute('data-slide-to', i + 1);
+		dot.classList.add('dot');
+		indicators.append(dot);
+		if (i == 0) {
+			dot.style.opacity = 1;
+		}
+		dots.push(dot);
+	}
+
+
+	function currentDot() {
+		dots.forEach(dot => dot.style.opacity = 0.5);
+		dots[slideIndex - 1].style.opacity = 1;
+	}
+
 	prev.addEventListener('click', () => {
 		if (offset == 0) {
 			offset = +width.slice(0, -2) * (slides.length - 1);
@@ -405,6 +431,8 @@ document.addEventListener('DOMContentLoaded', () => {
 		}
 
 		current.textContent = `${addZero(slideIndex)}`;
+
+		currentDot();
 	});
 
 	next.addEventListener('click', () => {
@@ -423,43 +451,24 @@ document.addEventListener('DOMContentLoaded', () => {
 		}
 
 		current.textContent = `${addZero(slideIndex)}`;
+
+		currentDot();
 	});
 
-	/* showSlides(slideIndex);
+	dots.forEach(dot => {
+		dot.addEventListener('click', e => {
+			const slideTo = e.target.getAttribute('data-slide-to');
 
-	total.textContent = `${addZero(slides.length)}`;
-	
-	function showSlides(n) {
-		if (n < 1) {
-			slideIndex = slides.length;
-		}
+			slideIndex = slideTo;
+			offset = +width.slice(0, -2) * (slideTo - 1);
 
-		if (n > slides.length) {
-			slideIndex = 1;
-		}
+			slidesField.style.transform = `translateX(-${offset}px)`;
 
-		slides.forEach(item => {
-			item.classList.add('hide');
-			item.classList.remove('fade');
-		});
+			current.textContent = `${addZero(slideIndex)}`;
 
-		slides[slideIndex - 1].classList.add('fade');
-		slides[slideIndex - 1].classList.remove('hide');
-
-		current.textContent = `${addZero(slideIndex)}`;
-	}
-
-	function sliderPlus(n) {
-		showSlides(slideIndex += n);
-	}
-
-	prev.addEventListener('click', () => {
-		sliderPlus(-1);
+			currentDot();
+		})
 	});
 
-	next.addEventListener('click', () => {
-		sliderPlus(1);
-	}); */
-	
 });
  
