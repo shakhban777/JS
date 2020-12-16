@@ -467,7 +467,7 @@ document.addEventListener('DOMContentLoaded', () => {
 			current.textContent = `${addZero(slideIndex)}`;
 
 			currentDot();
-		})
+		});
 	});
 
 });
