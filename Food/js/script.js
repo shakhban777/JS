@@ -125,9 +125,9 @@ document.addEventListener('DOMContentLoaded', () => {
 			seconds.innerText = addZero(t.seconds);
 
 			const setNameDay = new SetText(nameDay, days.innerText, 'день', 'дня', 'дней', 'дней'),
-					setNameHours = new SetText(nameHours, hours.innerText, 'час', 'часа', 'часов', 'часов'),
-					setNameMinutes = new SetText(nameMinutes, minutes.innerText, 'минута', 'минуты', 'минут', 'минут'),
-					setNameSeconds = new SetText(nameSeconds, seconds.innerText, 'секунда', 'секунды', 'секунд', 'секунд');
+				setNameHours = new SetText(nameHours, hours.innerText, 'час', 'часа', 'часов', 'часов'),
+				setNameMinutes = new SetText(nameMinutes, minutes.innerText, 'минута', 'минуты', 'минут', 'минут'),
+				setNameSeconds = new SetText(nameSeconds, seconds.innerText, 'секунда', 'секунды', 'секунд', 'секунд');
 
 			if (t <= 0) {
 				clearInterval(timeInterval);
@@ -146,7 +146,7 @@ document.addEventListener('DOMContentLoaded', () => {
 	// * Modal
 
 	const modalTrigger = document.querySelectorAll('[data-modal]'),
-			modal = document.querySelector('.modal');
+		modal = document.querySelector('.modal');
 
 	function openModal() {
 		modal.classList.add('show');
@@ -191,7 +191,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
 	// * Classes ("Наше меню на день")
-	
+
 	class MenuCard {
 		constructor(src, alt, title, describe, price, parentSelector, ...classes) {
 			this.src = src;
@@ -232,7 +232,7 @@ document.addEventListener('DOMContentLoaded', () => {
 		}
 	}
 
-	
+
 	const getResource = async url => {
 		const res = await fetch(url);
 
@@ -253,37 +253,37 @@ document.addEventListener('DOMContentLoaded', () => {
 
 	axios.get('http://localhost:3000/menu')
 		.then(data => {
-			data.data.forEach(({img, altimg, title, descr, price}) => {
+			data.data.forEach(({ img, altimg, title, descr, price }) => {
 				new MenuCard(img, altimg, title, descr, price, '.menu .container').render();
 			});
 		});
 
 
 	/* getResource('http://localhost:3000/menu')
-       .then(data => createCard(data));
+		 .then(data => createCard(data));
 
-   function createCard(data) {
-       data.forEach(({img, altimg, title, descr, price}) => {
-           const element = document.createElement('div');
+	function createCard(data) {
+		 data.forEach(({img, altimg, title, descr, price}) => {
+			  const element = document.createElement('div');
 
-           element.classList.add("menu__item");
+			  element.classList.add("menu__item");
 
-           element.innerHTML = `
-               <img src=${img} alt=${altimg}>
-               <h3 class="menu__item-subtitle">${title}</h3>
-                <div class="menu__item-descr">${descr}</div>
-                <div class="menu__item-divider"></div>
-                <div class="menu__item-price">
-                    <div class="menu__item-cost">Цена:</div>
-                    <div class="menu__item-total"><span>${price}</span> грн/день</div>
-                </div>
-            `;
-            document.querySelector(".menu .container").append(element);
-        });
-    } */
+			  element.innerHTML = `
+					<img src=${img} alt=${altimg}>
+					<h3 class="menu__item-subtitle">${title}</h3>
+					 <div class="menu__item-descr">${descr}</div>
+					 <div class="menu__item-divider"></div>
+					 <div class="menu__item-price">
+						  <div class="menu__item-cost">Цена:</div>
+						  <div class="menu__item-total"><span>${price}</span> грн/день</div>
+					 </div>
+				`;
+				document.querySelector(".menu .container").append(element);
+		  });
+	 } */
 
 	// * Forms
-	
+
 	const forms = document.querySelectorAll('form');
 
 	const message = {
@@ -321,7 +321,7 @@ document.addEventListener('DOMContentLoaded', () => {
 			form.insertAdjacentElement('afterend', statusMessage);
 
 			const formData = new FormData(form);
-		
+
 			const json = JSON.stringify(Object.fromEntries(formData.entries()));
 
 			postData('http://localhost:3000/requests', json)
@@ -365,17 +365,17 @@ document.addEventListener('DOMContentLoaded', () => {
 	// * Slider
 
 	const slides = document.querySelectorAll('.offer__slide'),
-			slider = document.querySelector('.offer__slider'),
-			prev = document.querySelector('.offer__slider-prev'),
-			next = document.querySelector('.offer__slider-next'),
-			total = document.querySelector('#total'),
-			current = document.querySelector('#current'),
-			slidesWrapper = document.querySelector('.offer__slider-wrapper'),
-			slidesField = document.querySelector('.offer__slider-inner'),
-			width = window.getComputedStyle(slidesWrapper).width;
+		slider = document.querySelector('.offer__slider'),
+		prev = document.querySelector('.offer__slider-prev'),
+		next = document.querySelector('.offer__slider-next'),
+		total = document.querySelector('#total'),
+		current = document.querySelector('#current'),
+		slidesWrapper = document.querySelector('.offer__slider-wrapper'),
+		slidesField = document.querySelector('.offer__slider-inner'),
+		width = window.getComputedStyle(slidesWrapper).width;
 
 	let slideIndex = 1,
-		 offset = 0;
+		offset = 0;
 
 	total.textContent = `${addZero(slides.length)}`;
 	current.textContent = `${addZero(slideIndex)}`;
@@ -393,9 +393,9 @@ document.addEventListener('DOMContentLoaded', () => {
 	slider.style.position = 'relative';
 
 	const indicators = document.createElement('ol'),
-			dots = [];
+		dots = [];
 	indicators.classList.add('carousel-indicators');
-	
+
 	slider.append(indicators);
 
 	for (let i = 0; i < slides.length; i++) {
@@ -478,9 +478,39 @@ document.addEventListener('DOMContentLoaded', () => {
 	// * Calc
 
 	const result = document.querySelector('.calculating__result span');
-	let sex = 'female',
-		 height, weight, age,
-		 ratio = 1.375;
+	let sex, height, weight, age, ratio;
+
+	if (localStorage.getItem('sex')) {
+		sex = localStorage.getItem('sex');
+	} else {
+		sex = 'female';
+		localStorage.setItem('sex', 'female');
+	}
+
+	if (localStorage.getItem('ratio')) {
+		ratio = localStorage.getItem('ratio');
+	} else {
+		ratio = 1.375;
+		localStorage.setItem('ratio', 1.375);
+	}
+
+	function initLocalStorage(selector, activeClass) {
+		const elements = document.querySelectorAll(selector);
+
+		elements.forEach(elem => {
+			elem.classList.remove(activeClass);
+			if (elem.getAttribute('id') === localStorage.getItem('sex')) {
+				elem.classList.add(activeClass);
+			}
+
+			if (elem.getAttribute('data-ratio') === localStorage.getItem('ratio')) {
+				elem.classList.add(activeClass);
+			}
+		});
+	}
+
+	initLocalStorage('#gender div', 'calculating__choose-item_active');
+	initLocalStorage('#activity div', 'calculating__choose-item_active');
 
 	function calcTotal() {
 		if (!sex || !height || !weight || !age || !ratio) {
@@ -497,15 +527,17 @@ document.addEventListener('DOMContentLoaded', () => {
 
 	calcTotal();
 
-	function getStaticInformation(selectorParent, activeClass) {
-		const elements = document.querySelectorAll(`${selectorParent} div`);
+	function getStaticInformation(selector, activeClass) {
+		const elements = document.querySelectorAll(selector);
 
 		elements.forEach(elem => {
 			elem.addEventListener('click', e => {
 				if (e.target.getAttribute('data-ratio')) {
 					ratio = +e.target.getAttribute('data-ratio');
+					localStorage.setItem('ratio', +e.target.getAttribute('data-ratio'));
 				} else {
 					sex = e.target.getAttribute('id');
+					localStorage.setItem('sex', e.target.getAttribute('id'));
 				}
 
 				elements.forEach(item => {
@@ -519,14 +551,21 @@ document.addEventListener('DOMContentLoaded', () => {
 		});
 	}
 
-	getStaticInformation('#gender', 'calculating__choose-item_active');
-	getStaticInformation('#activity', 'calculating__choose-item_active');
+	getStaticInformation('#gender div', 'calculating__choose-item_active');
+	getStaticInformation('#activity div', 'calculating__choose-item_active');
 
 	function getDinamicInformation(selector) {
 		const input = document.querySelector(selector);
 
 		input.addEventListener('input', () => {
-			switch(input.getAttribute('id')) {
+
+			if (input.value.match(/\D/g)) {
+				input.style.border = '1px solid red';
+			} else {
+				input.style.border = '';
+			}
+
+			switch (input.getAttribute('id')) {
 				case 'weight':
 					weight = +input.value;
 					break;
@@ -537,7 +576,7 @@ document.addEventListener('DOMContentLoaded', () => {
 					age = +input.value;
 					break;
 			}
-	
+
 			calcTotal();
 		});
 	}
