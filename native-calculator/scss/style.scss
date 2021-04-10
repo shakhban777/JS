@@ -17,17 +17,15 @@ body {
 
 .calculator {
 	width: 400px;
-	margin: 0px auto;
+	margin: 0 auto;
 	border: 2px solid #fff;
-	display: grid;
-	grid-template-areas:
-		'result'
-		'buttons';
-	grid-template-rows: 2em 1fr;
+	display: flex;
+	flex-direction: column;
 }
 
 .calculator__result {
 	background-color: #000;
+	padding-bottom: 0.5em;
 	text-align: right;
 	overflow: hidden;
 	& span {
@@ -37,20 +35,13 @@ body {
 }
 
 .calculator__buttons {
-	display: grid;
-	grid-template-areas:
-		'nums'
-		'operations';
-	grid-template-columns: 10fr 1fr;
+	display: flex;
 }
 
 .calculator__numerical {
 	display: flex;
 	flex-wrap: wrap;
 	align-items: center;
-}
-
-.calculator__operations {
 }
 
 .calculator__button {
