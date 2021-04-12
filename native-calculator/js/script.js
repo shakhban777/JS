@@ -14,11 +14,6 @@ function calculator() {
          || result.textContent.endsWith('+');
    }
 
-   function haveOperation() {
-      return result.textContent.includes('/') || result.textContent.includes('*') || result.textContent.includes('-')
-         || result.textContent.includes('+');
-   }
-
    function deleteNum() {
       if (result.textContent === '0' || result.textContent.length <= 1) {
          result.textContent = '0';
@@ -81,7 +76,7 @@ function calculator() {
          pressedDot = false;
          currentOperation = operation;
          finishCalculate = false;
-      } else if (currentOperation && haveOperation() && !endsWithOperation()) {
+      } else if (currentOperation && !endsWithOperation()) {
          calculate();
          firstNum = parseFloat(result.textContent);
          currentOperation = operation;
